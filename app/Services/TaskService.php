@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Jobs\SendTaskAssignedNotification;
 use Illuminate\Database\Eloquent\Collection;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class TaskService
 {
@@ -25,6 +26,7 @@ class TaskService
         try {
             $task->assigned_to = $user->id;
             $task->save();
+            Log::info("Dispatch Send Task Assignment Notification");
             SendTaskAssignedNotification::dispatch($task, $user);
             return $task;
         } catch (Exception $e) {
